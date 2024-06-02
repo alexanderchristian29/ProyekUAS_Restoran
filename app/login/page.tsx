@@ -1,8 +1,6 @@
 'use client';
-
 import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react';
-import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
 import { LayoutContext } from '@layout/context/layoutcontext';
@@ -15,7 +13,7 @@ const LoginPage = () => {
     const { layoutConfig } = useContext(LayoutContext);
 
     const router = useRouter();
-    const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden p-input-filled');
+    const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
 
     console.log(email);
     return (
@@ -57,7 +55,6 @@ const LoginPage = () => {
                             }
                         </div>
                         <div className="flex flex-column gap-2 mb-2">
-
                             <label htmlFor="password" className="block text-900 font-medium text-xl mb-2">
                                 Password
                             </label>

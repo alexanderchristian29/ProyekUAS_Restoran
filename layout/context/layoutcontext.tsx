@@ -1,6 +1,6 @@
 
-import { LayoutContextProps } from "@/types/interface";
-import { ChildContainerProps, LayoutConfig, LayoutState } from "@/types/types";
+
+import { ChildContainerProps, LayoutConfig, LayoutState, LayoutContextProps } from "@/types/types";
 import { createContext, useState } from "react";
 export const LayoutContext = createContext({} as LayoutContextProps);
 

@@ -15,7 +15,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
        <head>
           <link id="theme-css" href={`/themes/lara-light-indigo/theme.css`} rel="stylesheet"></link>
       </head>
-      <body className=''>
+      <body className='surface-ground'>
         <PrimeReactProvider>
             <LayoutProvider>{children}</LayoutProvider>
         </PrimeReactProvider>

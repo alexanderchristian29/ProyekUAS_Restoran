@@ -13,12 +13,12 @@ const LoginPage = () => {
     const { layoutConfig } = useContext(LayoutContext);
 
     const router = useRouter();
-    const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+    const containerClassName = classNames(' flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
 
     console.log(email);
     return (
         <div className={containerClassName}>
-            <div className="flex flex-column align-items-center justify-content-center">
+            <div className="flex flex-column align-items-center justify-content-center ">
                 <div
                     style={{
                         borderRadius: '56px',
@@ -55,6 +55,7 @@ const LoginPage = () => {
                             }
                         </div>
                         <div className="flex flex-column gap-2 mb-2">
+
                             <label htmlFor="password" className="block text-900 font-medium text-xl mb-2">
                                 Password
                             </label>

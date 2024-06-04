@@ -54,7 +54,18 @@ export type LatestOrders = {
   email: string;
   order_date: string;
 };
- 
+
+export type OrdersTableType = {
+  id: string;
+  name: string;
+  image_url: string;
+  order_date: string;
+  nama_menu: string;
+  total_item: number;
+  harga_menu: number;
+  total_harga?: number;
+}
+
 // export type LatestOrdersRaw = Omit<LatestOrders, 'amount'> & {
 //   amount: number;
 // };

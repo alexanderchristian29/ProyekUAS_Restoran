@@ -2,8 +2,10 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { LatestInvoiceRaw, LatestOrders, Revenue } from './definitions';
+import { LatestInvoiceRaw, LatestOrders, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
+
+const ITEMS_PER_PAGE = 3;
 
 export async function fetchCardData() {
   try {
@@ -108,5 +110,51 @@ export async function fetchLatestOrders() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest reservations.');
+  }
+}
+
+/* orders fungsi */
+
+/* filtered */
+export async function fetchOrdersPages(query: string) {
+
+}
+
+export async function fetchFilteredOrders(
+    query: string,
+    currentPage: number,
+  ){
+  
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    noStore();
+    const data = await sql<OrdersTableType>`
+      SELECT 
+        orders.id, 
+        customers.name, 
+        customers.image_url,
+        TO_CHAR(orders.order_date, 'DD Mon YYYY') AS order_date,
+        menus.name as nama_menu,
+        orders.total_items as total_item,
+        menus.price as harga_menu
+      FROM orders
+      LEFT JOIN invoices ON orders.invoice_id = invoices.id
+      LEFT JOIN customers ON invoices.customer_id = customers.id
+      LEFT JOIN menus ON orders.menu_id = menus.id
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        menus.name ILIKE ${`%${query}%`}
+      ORDER BY invoices.invoice_date DESC, invoices.id ASC`;
+
+    const orders = data.rows.map((order) => ({
+      ...order,
+      harga_menu: formatCurrency(order.harga_menu),
+      total_harga: formatCurrency(order.total_item * order.harga_menu),
+    }));
+ 
+    return orders;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch customer table.');
   }
 }

@@ -179,7 +179,7 @@ const invoices = [
   {
     id: '7e60098d-c255-4d37-946e-d81f0dcdb9ca',
     customer_id: customers[5].id,
-    amount: 25000,
+    amount: 60000,
     invoice_date: '2024-04-01',
     due_date: '2024-05-01',
     status: 'paid',
@@ -221,12 +221,21 @@ const invoices = [
 const orders = [
   {
     id: '123e4567-e89b-12d3-a456-426614174201',
+    invoice_id: invoices[5].id,
+    menu_id: menus[2].id,
+    order_date: '2024-05-01',
+    order_time: '13:00',
+    total_items: 10,
+    notes: '-'
+  },
+  {
+    id: '123e4567-e89b-12d3-a456-426614174201',
     invoice_id: invoices[6].id,
     menu_id: menus[0].id,
     order_date: '2024-05-01',
     order_time: '13:00',
     total_items: 2,
-    notes: 'No onions'
+    notes: '-'
   },
   {
     id: '123e4567-e89b-12d3-a456-426614174202',
@@ -235,7 +244,7 @@ const orders = [
     order_date: '2024-05-05',
     order_time: '13:45',
     total_items: 4,
-    notes: 'Spicy level 2'
+    notes: '-'
   },
   {
     id: '123e4567-e89b-12d3-a456-426614174200',
@@ -244,7 +253,7 @@ const orders = [
     order_date: '2024-05-10',
     order_time: '12:30',
     total_items: 3,
-    notes: 'Extra napkins'
+    notes: '-'
   },
   {
     id: '123e4567-e89b-12d3-a456-426614174203',
@@ -253,23 +262,11 @@ const orders = [
     order_date: '2024-05-15',
     order_time: '14:15',
     total_items: 1,
-    notes: 'Extra sauce'
+    notes: '-'
   }
 ];
 
 const revenue = [
-  { year: '2023', month: 'Jan', revenue: 1000 },
-  { year: '2023', month: 'Feb', revenue: 800 },
-  { year: '2023', month: 'Mar', revenue: 1200 },
-  { year: '2023', month: 'Apr', revenue: 1500 },
-  { year: '2023', month: 'May', revenue: 1300 },
-  { year: '2023', month: 'Jun', revenue: 2200 },
-  { year: '2023', month: 'Jul', revenue: 2500 },
-  { year: '2023', month: 'Aug', revenue: 2700 },
-  { year: '2023', month: 'Sep', revenue: 1500 },
-  { year: '2023', month: 'Oct', revenue: 1800 },
-  { year: '2023', month: 'Nov', revenue: 2000 },
-  { year: '2023', month: 'Dec', revenue: 3800 },
   { year: '2024', month: 'Jan', revenue: 2000 },
   { year: '2024', month: 'Feb', revenue: 1800 },
   { year: '2024', month: 'Mar', revenue: 2200 },

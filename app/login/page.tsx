@@ -6,6 +6,9 @@ import { Password } from 'primereact/password';
 import { LayoutContext } from '@layout/context/layoutcontext';
 import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
+import 'primereact/resources/primereact.css';
+import 'primeflex/primeflex.css';
+import 'primeicons/primeicons.css';
 
 const LoginPage = () => {
     const [password, setPassword] = useState('');
@@ -13,12 +16,12 @@ const LoginPage = () => {
     const { layoutConfig } = useContext(LayoutContext);
 
     const router = useRouter();
-    const containerClassName = classNames(' flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+    const containerClassName = classNames('flex min-h-screen flex-col p-6 align-items-center justify-content-center overflow-hidden bg-no-repeat bg-cover bg-center', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
 
     console.log(email);
     return (
-        <div className={containerClassName}>
-            <div className="flex flex-column align-items-center justify-content-center ">
+        <div className={containerClassName} style={{backgroundImage: "url('/layout/images/bg-resto.jpg')"}}>
+            <div className="flex flex-column align-items-center justify-content-center">
                 <div
                     style={{
                         borderRadius: '56px',
@@ -28,7 +31,16 @@ const LoginPage = () => {
                 >
                     <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '53px' }}>
                         <div className="text-center mb-5">
-                            <img src="/layout/logo/BakarSeafood.svg" alt="Logo" height="200" className="mb-3" />
+                            <img src="/layout/logo/BakarSeafood.svg" 
+                                alt="Logo" 
+                                className="mb-3" 
+                                style={{
+                                    borderRadius: '40%',
+                                    objectFit: 'cover',
+                                    objectPosition: 'center',
+                                    overflow: 'hidden'
+                                }} 
+                            />
                             <div className="text-900 text-3xl font-medium mb-3">Welcome, Bakar Seafood Restaurant</div>
                             <div className="text-600 font-medium mb-3">Comfortable Service</div>
                             <div className="text-red-400">Yummy Food!</div>
@@ -63,7 +75,6 @@ const LoginPage = () => {
                                 inputId="password" 
                                 value={password} 
                                 onChange={(e) => setPassword(e.target.value)} 
-                                toggleMask
                                 placeholder="Password" 
                                 className="w-ful" 
                                 inputClassName="w-full p-3 md:w-30rem"
@@ -83,7 +94,7 @@ const LoginPage = () => {
                                 Forgot password?
                             </a>
                         </div>
-                        <Button label="Login" className="w-full p-3 text-xl bg-orange-500 hover:bg-orange-300 focus:bg-orange-400" onClick={() => router.push('/')}></Button>
+                        <Button label="Login" className="w-full p-3 text-xl bg-orange-500 hover:bg-orange-300 focus:bg-orange-400" onClick={() => router.push('/dashboard')}></Button>
                     </div>
                 </div>
             </div>

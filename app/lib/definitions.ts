@@ -29,9 +29,8 @@ export type Menu = {
 export type Invoice = {
   id: string;
   customer_id: string;
-  total_amount: number;
-  invoice_date: string;
-  due_date: string;
+  total: number;
+  date: string;
   status: 'pending' | 'paid';
 };
 
@@ -45,6 +44,8 @@ export type Order = {
 };
 
 export type Revenue = {
+  id: number;
+  year: string;
   month: string;
   revenue: number;
 };
@@ -55,12 +56,36 @@ export type LatestInvoice = {
   image_url: string;
   email: string;
   amount: string;
+  status: 'pending' | 'paid';
 };
 
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
   amount: number;
 };
+
+export type LatestOrders = {
+  id: string;
+  name: string;
+  image_url: string;
+  email: string;
+  order_date: string;
+};
+
+export type OrdersTableType = {
+  id: string;
+  name: string;
+  image_url: string;
+  order_date: string;
+  nama_menu: string;
+  total_item: number;
+  harga_menu: number;
+  total_harga?: number;
+}
+
+// export type LatestOrdersRaw = Omit<LatestOrders, 'amount'> & {
+//   amount: number;
+// };
 
 export type InvoicesTable = {
   id: string;

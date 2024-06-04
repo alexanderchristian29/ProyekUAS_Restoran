@@ -117,7 +117,25 @@ export async function fetchLatestOrders() {
 
 /* filtered */
 export async function fetchOrdersPages(query: string) {
-
+  noStore();
+  try {
+    const count = await sql`
+      SELECT COUNT(orders.id)
+      FROM orders
+      LEFT JOIN invoices ON orders.invoice_id = invoices.id
+      LEFT JOIN customers ON invoices.customer_id = customers.id
+      LEFT JOIN menus ON orders.menu_id = menus.id
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        menus.name ILIKE ${`%${query}%`}
+    `;
+ 
+    const totalCustomers = Number(count.rows[0].count);
+    return totalCustomers;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of customers.');
+  }
 }
 
 export async function fetchFilteredOrders(
@@ -144,7 +162,8 @@ export async function fetchFilteredOrders(
       WHERE
         customers.name ILIKE ${`%${query}%`} OR
         menus.name ILIKE ${`%${query}%`}
-      ORDER BY invoices.invoice_date DESC, invoices.id ASC`;
+      ORDER BY invoices.invoice_date DESC, invoices.id ASC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`;
 
     const orders = data.rows.map((order) => ({
       ...order,

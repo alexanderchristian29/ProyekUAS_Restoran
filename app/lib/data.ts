@@ -2,7 +2,7 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { LatestInvoiceRaw, LatestOrders, OrdersTableType, Revenue } from './definitions';
+import { CustomersTableType, LatestInvoiceRaw, LatestOrders, MenusTableType, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const ITEMS_PER_PAGE = 3;
@@ -130,8 +130,8 @@ export async function fetchOrdersPages(query: string) {
         menus.name ILIKE ${`%${query}%`}
     `;
  
-    const totalCustomers = Number(count.rows[0].count);
-    return totalCustomers;
+    const totalOrders = Number(count.rows[0].count);
+    return totalOrders;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of customers.');
@@ -177,3 +177,115 @@ export async function fetchFilteredOrders(
     throw new Error('Failed to fetch customer table.');
   }
 }
+
+/* orders fungsi */
+
+
+/* customers fungsi */
+
+/* filtered */
+export async function fetchCustomersPages(query: string) {
+  noStore();
+  try {
+    const count = await sql`
+      SELECT COUNT(*)
+      FROM customers
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        customers.email ILIKE ${`%${query}%`}
+    `;
+ 
+    const totalCustomers = Number(count.rows[0].count);
+    return totalCustomers;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of customers.');
+  }
+}
+
+export async function fetchFilteredCustomers(
+    query: string,
+    currentPage: number,
+  ){
+  
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    noStore();
+    const data = await sql<CustomersTableType>`
+      SELECT 
+        customers.id,
+        customers.name,
+        customers.email,
+        customers.image_url,
+        customers.address,
+        COUNT(invoices.id) AS total_invoices,
+        SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
+        SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
+      FROM customers 
+      JOIN invoices ON invoices.customer_id = customers.id
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        customers.email ILIKE ${`%${query}%`}
+      GROUP BY customers.id, customers.name, customers.email, customers.image_url, customers.address
+      ORDER BY customers.name ASC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`;
+ 
+    return data.rows;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch customer table.');
+  }
+}
+/* customers fungsi */
+
+
+/* menus fungsi */
+
+/* filtered */
+export async function fetchMenusPages(query: string) {
+  noStore();
+  try {
+    const count = await sql`
+      SELECT COUNT(*)
+      FROM menus
+      WHERE
+        menus.name ILIKE ${`%${query}%`} OR
+        menus.category ILIKE ${`%${query}%`}
+    `;
+ 
+    const totalMenus = Number(count.rows[0].count);
+    return totalMenus;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of menus.');
+  }
+}
+
+export async function fetchFilteredMenus(
+    query: string,
+    currentPage: number,
+  ){
+  
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    noStore();
+    const data = await sql<MenusTableType>`
+      SELECT 
+        menus.id,
+        menus.name,
+        menus.category,
+        menus.price,
+        menus.available
+      FROM menus
+      WHERE
+        menus.name ILIKE ${`%${query}%`} OR
+        menus.category ILIKE ${`%${query}%`}
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`;
+ 
+    return data.rows;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch menus table.');
+  }
+}
+/* menus fungsi */

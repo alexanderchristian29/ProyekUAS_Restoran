@@ -86,11 +86,19 @@ export type CustomersTableType = {
   name: string;
   email: string;
   image_url: string;
+  address: string;
   total_invoices: number;
   total_pending: number;
   total_paid: number;
 };
 
+export type MenusTableType ={
+  id: string;
+  name: string;
+  price: string;
+  category: string;
+  available: boolean;
+}
 export type FormattedCustomersTable = {
   id: string;
   name: string;

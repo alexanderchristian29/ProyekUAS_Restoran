@@ -15,8 +15,8 @@ const links = [
     icon: ListBulletIcon,
   },
   {
-    name: 'Invoices',
-    href: '/dashboard/invoices',
+    name: 'Menu',
+    href: '/dashboard/menus',
     icon: DocumentDuplicateIcon,
   },
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },

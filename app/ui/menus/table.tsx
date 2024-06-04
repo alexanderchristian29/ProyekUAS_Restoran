@@ -2,23 +2,24 @@ import Image from 'next/image';
 import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
 // import { UpdateCustomers, CreateCustomers,DeleteCustomers } from './buttons';
-import { fetchFilteredCustomers } from '@/app/lib/data';
+import { fetchFilteredMenus } from '@/app/lib/data';
+import clsx from 'clsx';
 
-export default async function CustomersTable({
+export default async function MenusTable({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  const customers = await fetchFilteredCustomers(query, currentPage);
+  const menus = await fetchFilteredMenus(query, currentPage);
 
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} text-2xl mb-4`}>Customers</h1>
+      <h1 className={`${lusitana.className} text-2xl mb-4`}>Menus</h1>
       <div className="flex items-center justify-between gap-2 md:mt-8">
         <div className="flex-grow">
-          <Search placeholder="Search nama customer atau email customer..." />
+          <Search placeholder="Search nama customer atau nama menu..." />
         </div>
         {/* <CreateCustomers /> */}
       </div>
@@ -33,19 +34,13 @@ export default async function CustomersTable({
                       Nama
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Email
+                      Kategori
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Alamat
+                      Harga
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Total Invoices
-                    </th>
-                    <th scope="col" className="px-4 py-5 font-medium">
-                      Total Paid
-                    </th>
-                    <th scope="col" className="px-4 py-5 font-medium">
-                      Total Pending
+                      Kesediaan
                     </th>
                     <th scope="col" className="relative py-3 pl-6 pr-3">
                       <span className="sr-only">Edit</span>
@@ -53,34 +48,31 @@ export default async function CustomersTable({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 text-gray-900">
-                  {customers.map((customer) => (
-                    <tr key={customer.id} className="group">
-                      <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={customer.image_url}
-                            className="rounded-full"
-                            alt={`${customer.name}'s profile picture`}
-                            width={28}
-                            height={28}
-                          />
-                          <p>{customer.name}</p>
-                        </div>
-                      </td>
-                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.email}
+                  {menus.map((menu) => (
+                    <tr key={menu.id} className="group">
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {menu.name}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.address}
+                        {menu.category}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.total_invoices}
+                        {menu.price}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.total_paid}
-                      </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.total_pending}
+                        {/* {menu.available ? 'Tersedia' : 'Tidak Tersedia'}
+                         */}
+                          <span
+                            className={clsx(
+                              'inline-flex items-center rounded px-2.5 py-0.5 text-xs font-medium md:text-sm',
+                              {
+                                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': menu.available === true,
+                                'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': menu.available === false,
+                              }
+                            )}
+                          >
+                          {menu.available ? 'Tersedia' : 'Tidak Tersedia'}
+                        </span>
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">

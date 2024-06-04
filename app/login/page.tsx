@@ -1,5 +1,5 @@
 'use client';
-import { useRouter } from 'next/navigation';
+
 import React, { useContext, useState } from 'react';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
@@ -9,13 +9,13 @@ import { classNames } from 'primereact/utils';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
+import Link from 'next/link';
 
 const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const { layoutConfig } = useContext(LayoutContext);
-
-    const router = useRouter();
+    
     const containerClassName = classNames('flex min-h-screen flex-col p-6 align-items-center justify-content-center overflow-hidden bg-no-repeat bg-cover bg-center', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
 
     console.log(email);
@@ -26,7 +26,7 @@ const LoginPage = () => {
                     style={{
                         borderRadius: '56px',
                         padding: '0.3rem',
-                        background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 100%)'
+                        background: 'linear-gradient(180deg, var(--primary-color) 40%, rgba(33, 150, 243, 0) 100%)'
                     }}
                 >
                     <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '53px' }}>
@@ -94,7 +94,11 @@ const LoginPage = () => {
                                 Forgot password?
                             </a>
                         </div>
-                        <Button label="Login" className="w-full p-3 text-xl bg-orange-500 hover:bg-orange-300 focus:bg-orange-400" onClick={() => router.push('/dashboard')}></Button>
+                        <Link
+                            href= '/'
+                        >
+                            <Button label="Login" className="w-full p-3 text-xl bg-orange-500 hover:bg-orange-300 focus:bg-orange-400"></Button>
+                        </Link>
                     </div>
                 </div>
             </div>

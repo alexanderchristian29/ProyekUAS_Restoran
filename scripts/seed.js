@@ -138,7 +138,7 @@ async function seedInvoices(client) {
       CREATE TABLE IF NOT EXISTS invoices (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         customer_id UUID NOT NULL,
-        total_amount INT NOT NULL,
+        amount INT NOT NULL,
         invoice_date DATE NOT NULL,
         due_date DATE NOT NULL,
         status VARCHAR(255) NOT NULL,
@@ -155,8 +155,8 @@ async function seedInvoices(client) {
     const insertedInvoices = await Promise.all(
       invoices.map(
         (invoice) => client.sql`
-        INSERT INTO invoices (id, customer_id, total_amount, invoice_date, due_date, status)
-        VALUES (${invoice.id}, ${invoice.customer_id}, ${invoice.total_amount}, ${invoice.invoice_date}, ${invoice.due_date}, ${invoice.status})
+        INSERT INTO invoices (id, customer_id, amount, invoice_date, due_date, status)
+        VALUES (${invoice.id}, ${invoice.customer_id}, ${invoice.amount}, ${invoice.invoice_date}, ${invoice.due_date}, ${invoice.status})
         ON CONFLICT (id) DO NOTHING;
       `,
       ),
@@ -183,6 +183,7 @@ async function seedOrders(client) {
       CREATE TABLE IF NOT EXISTS orders (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         invoice_id UUID NOT NULL,
+        menu_id UUID NOT NULL,
         order_date DATE NOT NULL,
         order_time TIME NOT NULL,
         total_items INT NOT NULL,
@@ -190,6 +191,10 @@ async function seedOrders(client) {
         CONSTRAINT fk_invoice
           FOREIGN KEY(invoice_id) 
             REFERENCES invoices(id)
+            ON DELETE CASCADE,
+        CONSTRAINT fk_menu
+          FOREIGN KEY(menu_id) 
+            REFERENCES menus(id)
             ON DELETE CASCADE
       );
     `;
@@ -200,8 +205,8 @@ async function seedOrders(client) {
     const insertedOrders = await Promise.all(
       orders.map(
         (order) => client.sql`
-        INSERT INTO orders (id, invoice_id, order_date, order_time, total_items, notes)
-        VALUES (${order.id}, ${order.invoice_id}, ${order.order_date}, ${order.order_time}, ${order.total_items}, ${order.notes})
+        INSERT INTO orders (id, invoice_id, menu_id, order_date, order_time, total_items, notes)
+        VALUES (${order.id}, ${order.invoice_id}, ${order.menu_id}, ${order.order_date}, ${order.order_time}, ${order.total_items}, ${order.notes})
         ON CONFLICT (id) DO NOTHING;
       `,
       ),
@@ -224,7 +229,9 @@ async function seedRevenue(client) {
     // Create the "revenue" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS revenue (
-        month VARCHAR(10) NOT NULL UNIQUE,
+        id BIGSERIAL PRIMARY KEY,
+        year VARCHAR(10) NOT NULL,
+        month VARCHAR(10) NOT NULL,
         revenue INT NOT NULL
       );
     `;
@@ -235,9 +242,9 @@ async function seedRevenue(client) {
     const insertedRevenue = await Promise.all(
       revenue.map(
         (rev) => client.sql`
-        INSERT INTO revenue (month, revenue)
-        VALUES (${rev.month}, ${rev.revenue})
-        ON CONFLICT (month) DO NOTHING;
+        INSERT INTO revenue (year, month, revenue)
+        VALUES (${rev.year},${rev.month}, ${rev.revenue})
+        ON CONFLICT (id) DO NOTHING;
       `,
       ),
     );

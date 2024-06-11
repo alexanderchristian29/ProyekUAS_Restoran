@@ -1,20 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { MenuForm } from '@/app/lib/definitions';
-import {
-    BanknotesIcon,
-    DocumentTextIcon,
-} from '@heroicons/react/24/outline';
+import { BanknotesIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateMenus } from '@/app/lib/actions';
 
-export default function EditInvoiceForm({
-    menus,
-}: {
-    menus: MenuForm;
-}) {
+export default function EditInvoiceForm({ menus }: { menus: MenuForm }) {
     const updateMenusById = updateMenus.bind(null, menus.id);
     const [formState, setFormState] = useState<MenuForm>({
         id: menus.id,
@@ -23,13 +16,12 @@ export default function EditInvoiceForm({
         category: menus.category,
         available: menus.available
     });
-    console.log(formState);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement| any>) => {
+        const { name, value, checked } = e.target;
 
-        // If it's a checkbox, handle the checked property
-        const newValue = type === 'checkbox' ? "true" : value;
+        // Jika properti checked aktif (true), set nilai formState.available menjadi true, jika tidak, set menjadi false
+        const newValue = name === 'available' ? checked : value;
 
         setFormState({
             ...formState,
@@ -37,11 +29,10 @@ export default function EditInvoiceForm({
         });
     };
 
-
     return (
         <form action={updateMenusById}>
             <input type="hidden" name="id" value={formState.id} />
-           <div className="rounded-md bg-gray-50 p-4 md:p-6">
+            <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 {/* Menu Name */}
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -110,7 +101,6 @@ export default function EditInvoiceForm({
                             type="checkbox"
                             id="available"
                             name="available"
-                            value={formState.available ? "true" : "false"}
                             checked={formState.available}
                             onChange={handleInputChange}
                             className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"

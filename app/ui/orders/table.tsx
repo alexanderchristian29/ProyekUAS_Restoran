@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
-import { CreateOrders, DeleteOrders } from './buttons';
+import { CreateOrders, DeleteOrders, UpdateOrders } from './buttons';
 import { fetchFilteredOrders } from '@/app/lib/data';
 
 export default async function OrdersTable({
@@ -78,7 +78,7 @@ export default async function OrdersTable({
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">
-                          {/* <UpdateCustomers id={customer.id} /> */}
+                          <UpdateOrders  id={order.id} />
                           <DeleteOrders id={order.id} />
                         </div>
                       </td>

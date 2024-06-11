@@ -1,4 +1,4 @@
-"user client";
+"use client";
 
 import { useState } from 'react';
 import { MenuForm } from '@/app/lib/definitions';
@@ -23,12 +23,13 @@ export default function EditInvoiceForm({
         category: menus.category,
         available: menus.available
     });
+    console.log(formState);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
 
         // If it's a checkbox, handle the checked property
-        const newValue = type === 'checkbox' ? "true" : "false";
+        const newValue = type === 'checkbox' ? "true" : value;
 
         setFormState({
             ...formState,
@@ -109,7 +110,7 @@ export default function EditInvoiceForm({
                             type="checkbox"
                             id="available"
                             name="available"
-                            checked={formState.available}
+                            value={formState.available ? "true" : "false"}
                             onChange={handleInputChange}
                             className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
                         />

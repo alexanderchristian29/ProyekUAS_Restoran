@@ -111,6 +111,7 @@ export default function EditInvoiceForm({
                             id="available"
                             name="available"
                             value={formState.available ? "true" : "false"}
+                            checked={formState.available}
                             onChange={handleInputChange}
                             className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
                         />

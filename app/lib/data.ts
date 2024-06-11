@@ -2,7 +2,7 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenusTableType, OrdersField, OrdersTableType, Revenue } from './definitions';
+import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenuForm, MenusTableType, OrdersField, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const ITEMS_PER_PAGE = 3;
@@ -376,6 +376,31 @@ export async function fetchMenus() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all menus.');
+  }
+}
+
+export async function fetchMenuById(id: string) {
+  noStore();
+  try {
+    const data = await sql<MenuForm>`
+      SELECT
+        menus.id,
+        menus.name,
+        menus.price,
+        menus.category,
+        menus.available
+      FROM menus
+      WHERE menus.id = ${id};
+    `;
+ 
+    const menus = data.rows.map((menus) => ({
+      ...menus,
+    }));
+ 
+    return menus[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch menus.');
   }
 }
 /* menus fungsi */

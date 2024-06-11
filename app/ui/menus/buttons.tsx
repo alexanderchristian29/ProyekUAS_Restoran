@@ -1,5 +1,5 @@
 import { deleteMenus } from "@/app/lib/actions";
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export function CreateMenus() {
@@ -25,5 +25,16 @@ export function DeleteMenus({ id }: { id: string }) {
                 <TrashIcon className="w-5" />
             </button>
         </form>
+    );
+}
+
+export function UpdateMenus({ id }: { id: string }) {
+    return (
+        <Link
+            href={`/dashboard/menus/${id}/edit`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+        >
+            <PencilIcon className="w-5" />
+        </Link>
     );
 }

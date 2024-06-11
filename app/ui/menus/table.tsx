@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
-import { CreateMenus, DeleteMenus } from './buttons';
+import { CreateMenus, DeleteMenus, UpdateMenus } from './buttons';
 import { fetchFilteredMenus } from '@/app/lib/data';
 import clsx from 'clsx';
 
@@ -76,7 +76,7 @@ export default async function MenusTable({
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">
-                          {/* <UpdateCustomers id={customer.id} /> */}
+                          <UpdateMenus id={menu.id} />
                           <DeleteMenus id={menu.id} />
                         </div>
                       </td>

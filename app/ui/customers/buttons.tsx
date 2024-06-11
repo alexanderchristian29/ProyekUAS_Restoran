@@ -1,4 +1,4 @@
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { deleteCustomers } from '@/app/lib/actions';
 
@@ -25,5 +25,16 @@ export function DeleteCustomers({ id }: { id: string }) {
                 <TrashIcon className="w-5" />
             </button>
         </form>
+    );
+}
+
+export function UpdateCustomers({ id }: { id: string }) {
+    return (
+        <Link
+            href={`/dashboard/customers/${id}/edit`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+        >
+            <PencilIcon className="w-5" />
+        </Link>
     );
 }

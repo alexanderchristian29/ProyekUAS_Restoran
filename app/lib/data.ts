@@ -2,7 +2,7 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenuForm, MenusTableType, OrdersField, OrdersTableType, Revenue } from './definitions';
+import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenuForm, MenusTableType, OrderForm, OrdersField, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const ITEMS_PER_PAGE = 3;
@@ -183,13 +183,15 @@ export async function fetchOrders() {
   try {
     const data = await sql<OrdersField>`
       SELECT
-        invoice_id,
-        name,
-        email,
-        address,
-        image_url
+      orders.id,
+      orders.invoice_id,
+      orders.menu_id,
+      orders.order_date,
+      orders.order_time,
+      orders.total_items,
+      orders.notes
       FROM orders
-      ORDER BY name ASC
+      ORDER BY orders.id ASC
     `;
  
     const orders = data.rows;
@@ -197,6 +199,33 @@ export async function fetchOrders() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all orders.');
+  }
+}
+export async function fetchOrdersById(id: string) {
+  noStore();
+  try {
+    const data = await sql<OrderForm>`
+      SELECT
+      orders.id,
+      orders.invoice_id,
+      orders.menu_id,
+      orders.order_date,
+      orders.order_time,
+      orders.total_items,
+      orders.notes
+      FROM orders
+      WHERE orders.id = ${id};
+    `;
+ 
+    const orders = data.rows.map((orders) => ({
+      ...orders,
+    }));
+    console.log(orders);
+ 
+    return orders[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch orders.');
   }
 }
 /* orders fungsi */

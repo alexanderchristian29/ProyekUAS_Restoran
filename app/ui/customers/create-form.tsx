@@ -75,7 +75,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                             name="image"
                             type="file"
                             accept=".png"
-                            className="block w-full border-gray-200 py-2 text-sm outline-2 py-2 pl-10"
+                            className="block w-full border-gray-200 text-sm outline-2 py-2 pl-10"
                         />
                         <InboxIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     </div>

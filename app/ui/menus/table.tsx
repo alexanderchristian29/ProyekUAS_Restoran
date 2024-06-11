@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
-// import { UpdateCustomers, CreateCustomers,DeleteCustomers } from './buttons';
+import { CreateMenus, DeleteMenus } from './buttons';
 import { fetchFilteredMenus } from '@/app/lib/data';
 import clsx from 'clsx';
 
@@ -17,12 +17,12 @@ export default async function MenusTable({
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} text-2xl mb-4`}>Menus</h1>
-      <div className="flex items-center justify-between gap-2 md:mt-8">
+      <div className="flex items-center justify-between gap-2 md:mt-8 md:mb-8 mb-4">
         <div className="flex-grow">
           <Search placeholder="Search nama customer atau nama menu..." />
         </div>
-        {/* <CreateCustomers /> */}
       </div>
+      <CreateMenus />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
@@ -76,8 +76,8 @@ export default async function MenusTable({
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">
-                          {/* <UpdateCustomers id={customer.id} />
-                          <DeleteCustomers id={customer.id} /> */}
+                          {/* <UpdateCustomers id={customer.id} /> */}
+                          <DeleteMenus id={menu.id} />
                         </div>
                       </td>
                     </tr>

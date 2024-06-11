@@ -109,6 +109,22 @@ export type CustomersTableType = {
   total_paid: number;
 };
 
+export type CustomerField = {
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  image_url: string;
+};
+
+export type OrdersField = {
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  image_url: string;
+};
+
 export type MenusTableType ={
   id: string;
   name: string;
@@ -116,6 +132,15 @@ export type MenusTableType ={
   category: string;
   available: boolean;
 }
+
+export type MenuField = {
+  id: string;
+  name: string;
+  price: string;
+  category: string;
+  available: boolean;
+};
+
 export type FormattedCustomersTable = {
   id: string;
   name: string;
@@ -124,11 +149,6 @@ export type FormattedCustomersTable = {
   total_invoices: number;
   total_pending: string;
   total_paid: string;
-};
-
-export type CustomerField = {
-  id: string;
-  name: string;
 };
 
 export type InvoiceForm = {

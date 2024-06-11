@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
-// import { UpdateCustomers, CreateCustomers,DeleteCustomers } from './buttons';
+import { CreateOrders, DeleteOrders } from './buttons';
 import { fetchFilteredOrders } from '@/app/lib/data';
 
 export default async function OrdersTable({
@@ -16,12 +16,12 @@ export default async function OrdersTable({
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} text-2xl mb-4`}>Orders</h1>
-      <div className="flex items-center justify-between gap-2 md:mt-8">
+      <div className="flex items-center justify-between gap-2 md:mt-8  md:mb-8 mb-4">
         <div className="flex-grow">
           <Search placeholder="Search nama customer atau nama menu..." />
         </div>
-        {/* <CreateCustomers /> */}
       </div>
+      <CreateOrders />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
@@ -78,8 +78,8 @@ export default async function OrdersTable({
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">
-                          {/* <UpdateCustomers id={customer.id} />
-                          <DeleteCustomers id={customer.id} /> */}
+                          {/* <UpdateCustomers id={customer.id} /> */}
+                          <DeleteOrders id={order.id} />
                         </div>
                       </td>
                     </tr>

@@ -23,8 +23,10 @@ const FormSchemaMenu = z.object({
 })
 
 const CreateCustomers = FormSchemaCustomer.omit({ id: true });
+const UpdateCustomers = FormSchemaCustomer.omit({ id: true, });
 
 const CreateMenus = FormSchemaMenu.omit({ id: true });
+const UpdateMenus = FormSchemaMenu.omit({ id: true, });
 
 export async function createCustomers(formData: FormData) {
    
@@ -69,6 +71,35 @@ export async function deleteCustomers(id: string) {
   }
 }
 
+export async function updateCustomers(id: string, formData: FormData) {
+  const img = formData.get('image')
+  console.log(img);
+  let filename = '';
+  if(img instanceof File) {
+    filename = '/customers/' + img.name;
+    console.log(filename);
+  }
+  const { name, email, alamat, image_url } = UpdateCustomers.parse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    alamat: formData.get('address'),
+    image_url: filename,
+  });
+
+  try {
+    await sql`
+        UPDATE customers
+        SET name = ${name}, email = ${email}, image_url = ${image_url}, address = ${alamat}
+        WHERE id = ${id}
+      `;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update customers.' };
+  }
+  revalidatePath('/dashboard/customers');
+  redirect('/dashboard/customers');
+}
+
+
 export async function createMenus(formData: FormData) {
   
   const name = formData.get('name');
@@ -109,6 +140,28 @@ export async function deleteMenus(id: string) {
     return { message: 'Database Error: Failed to Delete Menus' };
   }
 }
+
+export async function updateMenus(id: string, formData: FormData) {
+  const { name, price, category, available } = UpdateMenus.parse({
+    name: formData.get('name'),
+    price: parseInt(formData.get('price') as string),
+    category: formData.get('category'),
+    available: formData.get('available') ? true : false,
+  });
+
+  try {
+    await sql`
+        UPDATE menus
+        SET name = ${name}, price = ${price}, category = ${category}, available = ${available}
+        WHERE id = ${id}
+      `;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update menus.' };
+  }
+  revalidatePath('/dashboard/menus');
+  redirect('/dashboard/menus');
+}
+
 
 
 export async function deleteOrders(id: string) {

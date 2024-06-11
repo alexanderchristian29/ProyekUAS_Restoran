@@ -2,7 +2,7 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { CustomerField, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenusTableType, OrdersField, OrdersTableType, Revenue } from './definitions';
+import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenusTableType, OrdersField, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const ITEMS_PER_PAGE = 3;
@@ -277,6 +277,31 @@ export async function fetchCustomers() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all customers.');
+  }
+}
+
+export async function fetchCustomerById(id: string) {
+  noStore();
+  try {
+    const data = await sql<CustomerForm>`
+      SELECT
+      customers.id,
+      customers.name,
+      customers.email,
+      customers.address,
+      customers.image_url
+      FROM customers
+      WHERE customers.id = ${id};
+    `;
+ 
+    const customers = data.rows.map((customers) => ({
+      ...customers,
+    }));
+ 
+    return customers[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch customers.');
   }
 }
 /* customers fungsi */

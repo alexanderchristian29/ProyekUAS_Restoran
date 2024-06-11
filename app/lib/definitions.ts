@@ -117,6 +117,22 @@ export type CustomerField = {
   image_url: string;
 };
 
+export type CustomerForm = {
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  image_url: string;
+};
+
+export type MenuForm = {
+  id: string;
+  name: string;
+  price: string;
+  category: string;
+  available: boolean;
+};
+
 export type OrdersField = {
   id: string;
   name: string;

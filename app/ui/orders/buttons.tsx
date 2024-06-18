@@ -1,5 +1,5 @@
 import { deleteOrders } from "@/app/lib/actions";
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export function CreateOrders() {
@@ -24,5 +24,16 @@ export function DeleteOrders({ id }: { id: string }) {
                 <TrashIcon className="w-5" />
             </button>
         </form>
+    );
+}
+
+export function UpdateOrders({ id }: { id: string }) {
+    return (
+        <Link
+            href={`/dashboard/orders/${id}/edit`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+        >
+            <PencilIcon className="w-5" />
+        </Link>
     );
 }

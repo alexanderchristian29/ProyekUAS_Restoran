@@ -145,10 +145,12 @@ export type OrderForm = {
 
 export type OrdersField = {
   id: string;
-  name: string;
-  email: string;
-  address: string;
-  image_url: string;
+  invoice_id: string;
+  menu_id: string;
+  order_date: string;
+  order_time: string;
+  total_items: number;
+  notes: string | null;
 };
 
 export type MenusTableType ={

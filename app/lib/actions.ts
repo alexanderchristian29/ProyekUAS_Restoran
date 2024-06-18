@@ -4,7 +4,8 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { File } from 'buffer';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 const FormSchemaCustomer = z.object({
   id: z.string(),
@@ -27,6 +28,25 @@ const UpdateCustomers = FormSchemaCustomer.omit({ id: true, });
 
 const CreateMenus = FormSchemaMenu.omit({ id: true });
 const UpdateMenus = FormSchemaMenu.omit({ id: true, });
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Username and password do not match.';
+        default:
+          return 'Username and password do not match.';
+      }
+    }
+    throw error;
+  }
+}
 
 export async function createCustomers(formData: FormData) {
    
@@ -161,8 +181,6 @@ export async function updateMenus(id: string, formData: FormData) {
   revalidatePath('/dashboard/menus');
   redirect('/dashboard/menus');
 }
-
-
 
 export async function deleteOrders(id: string) {
   try {

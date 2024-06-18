@@ -1,7 +1,5 @@
-'use client';
-import { PrimeReactProvider } from 'primereact/api';
-import { LayoutProvider } from '@layout/context/layoutcontext';
 import '@app/ui/global.css'
+import { anton, kanit, lusitana } from './ui/fonts';
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -10,14 +8,10 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-       <head>
-          <link id="theme-css" href={`/themes/lara-light-indigo/theme.css`} rel="stylesheet"></link>
+      <head>
+        <style>{`${kanit} ${anton}`}</style>
       </head>
-      <body>
-        <PrimeReactProvider>
-            <LayoutProvider>{children}</LayoutProvider>
-        </PrimeReactProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

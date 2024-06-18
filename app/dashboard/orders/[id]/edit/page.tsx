@@ -8,6 +8,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   
   const customers = await fetchDropdownCustomers();
+  console.log(customers);
   const menus = await fetchDropdownMenus();
 
   const [orders] = await Promise.all([

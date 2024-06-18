@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { CustomerDropwdownField, MenuDropwdownField, OrderForm } from '@/app/lib/definitions';
 import {
     CalculatorIcon,
@@ -22,7 +22,9 @@ export default function EditInvoiceForm({
     const updateOrdersById = updateOrders.bind(null, orders.id);
     const [formState, setFormState] = useState<OrderForm>({
         id: orders.id,
+        customer_id: orders.customer_id,
         invoice_id: orders.invoice_id,
+        status: orders.status,
         menu_id: orders.menu_id,
         order_date: orders.order_date,
         order_time: orders.order_time,
@@ -30,11 +32,15 @@ export default function EditInvoiceForm({
         notes: orders.notes || null
     });
 
-     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement| any>) => {
+        const { name, value, checked } = e.target;
+
+        // Jika properti checked aktif (true), set nilai formState.available menjadi true, jika tidak, set menjadi false
+        const newValue = name === 'available' ? checked : value;
+
         setFormState({
             ...formState,
-            [name]: value,
+            [name]: newValue,
         });
     };
 
@@ -42,6 +48,7 @@ export default function EditInvoiceForm({
     return (
         <form action={updateOrdersById}>
             <input type="hidden" name="id" value={formState.id} />
+            <input type="hidden" name="invoices" value={formState.invoice_id} />
            <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 {/* customer */}
                 <div className="mb-4">
@@ -53,6 +60,7 @@ export default function EditInvoiceForm({
                             id="customer"
                             name="customer"
                             className="block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder-gray-500"
+                            value={formState.customer_id}
                             disabled
                         >
                             {customers.map((customer, index) => (
@@ -66,13 +74,15 @@ export default function EditInvoiceForm({
 
                 {/* menu */}
                 <div className="mb-4">
-                    <label htmlFor="menu" className="block text-sm font-medium mb-2">
+                    <label htmlFor="menu_id" className="block text-sm font-medium mb-2">
                         Menu
                     </label>
                     <div className="relative">
                         <select
-                            id="menu"
-                            name="menu"
+                            id="menu_id"
+                            name="menu_id"
+                            value={formState.menu_id}
+                            onChange={handleInputChange}
                             className="block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder-gray-500"
                         >
                             {menus.map((menu, index) => (
@@ -86,13 +96,13 @@ export default function EditInvoiceForm({
 
                 {/* Item */}
                 <div className="mb-4">
-                    <label htmlFor="item" className="block text-sm font-medium mb-2">
+                    <label htmlFor="total_items" className="block text-sm font-medium mb-2">
                         Banyak Item
                     </label>
                     <div className="relative">
                         <input
-                            id="item"
-                            name="item"
+                            id="total_items"
+                            name="total_items"
                             type="number"
                             value={formState.total_items}
                             onChange={handleInputChange}
@@ -103,18 +113,38 @@ export default function EditInvoiceForm({
                 </div>
                 {/* Item */}
                 <div className="mb-4">
-                    <label htmlFor="item" className="block text-sm font-medium mb-2">
+                    <label htmlFor="notes" className="block text-sm font-medium mb-2">
                         Catatan Pesanan
                     </label>
                     <div className="relative">
                         <input
-                            id="note"
-                            name="note"
+                            id="notes"
+                            name="notes"
                             type="text"
+                            value={formState.notes || ''}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder-gray-500"
                         />
                         <ClipboardDocumentCheckIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    </div>
+                </div>
+
+                {/* status */}
+                 <div className="mb-4">
+                    <label htmlFor="status" className="block text-sm font-medium mb-2">
+                        Status Pesanan
+                    </label>
+                    <div className="relative">
+                        <select
+                            id="status"
+                            name="status"
+                            className="block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder-gray-500"
+                            value={formState.status}
+                            onChange={handleInputChange}
+                        >
+                            <option value='Pending'>Belum Bayar</option>
+                            <option value='Paid'>Sudah Bayar</option>
+                        </select>
                     </div>
                 </div>
             </div>

@@ -80,7 +80,7 @@ export default async function OrdersTable({
                         {order.total_harga}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {order.note}
+                        {order.notes}
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">

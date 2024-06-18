@@ -31,6 +31,14 @@ const FormSchemaOrders = z.object({
   customer: z.string()
 })
 
+const FormSchemaOrders2 = z.object({
+  id: z.string(),
+  menu: z.string(),
+  item: z.number(),
+  invoices: z.string(),
+  status: z.string()
+})
+
 const CreateCustomers = FormSchemaCustomer.omit({ id: true });
 const UpdateCustomers = FormSchemaCustomer.omit({ id: true, });
 
@@ -39,6 +47,7 @@ const UpdateMenus = FormSchemaMenu.omit({ id: true, });
 
 
 const CreateOrders = FormSchemaOrders.omit({ id: true });
+const UpdateOrders = FormSchemaOrders2.omit({ id: true });
 
 export async function authenticate(
   prevState: string | undefined,
@@ -217,7 +226,7 @@ export async function createOrders(formData: FormData) {
 
   // Ambil detail menu berdasarkan ID menu dari parsedData
   const menus = await fetchMenuById(parsedData.menu);
-
+  
   // Menghitung tanggal invoice hari ini
   const invoiceDate = new Date().toISOString().slice(0, 10);
 
@@ -254,23 +263,50 @@ export async function createOrders(formData: FormData) {
   redirect('/dashboard/orders');
 }
 
+
 export async function updateOrders(id: string, formData: FormData) {
-  const { name, price, category, available } = UpdateMenus.parse({
-    name: formData.get('name'),
-    price: parseInt(formData.get('price') as string),
-    category: formData.get('category'),
-    available: formData.get('available') ? true : false,
+  const menu = formData.get('menu_id');
+  const item = parseInt(formData.get('total_items') as string);
+  const note = formData.get('notes') as string;
+  const invoices = formData.get('invoices') as string;
+  const status = formData.get('status') as string;
+
+  // Parse data dari formData
+  const parsedData = UpdateOrders.parse({
+    menu,
+    item,
+    invoices,
+    status
   });
 
+  // Ambil detail menu berdasarkan ID menu dari parsedData
+  const menus = await fetchMenuById(parsedData.menu);
+
+  console.log(parsedData);
   try {
+    // Menyimpan data invoice baru ke dalam tabel invoices
     await sql`
-        UPDATE menus
-        SET name = ${name}, price = ${price}, category = ${category}, available = ${available}
-        WHERE id = ${id}
-      `;
+       UPDATE invoices
+        SET 
+          amount = ${parsedData.item * parseInt(menus.price)}, status = ${status}
+        WHERE id = ${invoices}
+    `;
+
+    // Memasukkan data order baru ke dalam tabel orders
+    await sql`
+       UPDATE orders
+        SET 
+          menu_id = ${parsedData.menu}, total_items = ${parsedData.item}, notes = ${note}
+        WHERE id = ${id}    
+    `;
+
+    console.log('Order updated successfully.');
   } catch (error) {
-    return { message: 'Database Error: Failed to Update menus.' };
+    return {
+      message: 'Database Error: Failed to Create menus.',
+    };
   }
-  revalidatePath('/dashboard/menus');
-  redirect('/dashboard/menus');
+  
+  revalidatePath('/dashboard/orders');
+  redirect('/dashboard/orders');
 }

@@ -149,7 +149,7 @@ export async function fetchFilteredOrders(
     const data = await sql<OrdersTableType>`
       SELECT 
         orders.id,
-        notes,
+        orders.notes,
         customers.name, 
         customers.image_url,
         TO_CHAR(orders.order_date, 'DD Mon YYYY') AS order_date,
@@ -207,14 +207,18 @@ export async function fetchOrdersById(id: string) {
   try {
     const data = await sql<OrderForm>`
       SELECT
-      orders.id,
-      orders.invoice_id,
-      orders.menu_id,
-      orders.order_date,
-      orders.order_time,
-      orders.total_items,
-      orders.notes
-      FROM orders
+        orders.id,
+        orders.invoice_id,
+        orders.menu_id,
+        orders.order_date,
+        orders.order_time,
+        orders.total_items,
+        customers.id as customer_id,
+        invoices.status as status,
+        orders.notes
+        FROM orders
+      JOIN invoices ON orders.invoice_id = invoices.id
+      JOIN customers ON invoices.customer_id = customers.id
       WHERE orders.id = ${id};
     `;
  

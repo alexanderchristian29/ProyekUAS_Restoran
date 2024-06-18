@@ -74,6 +74,7 @@ export type LatestOrders = {
 
 export type OrdersTableType = {
   id: string;
+  notes?: number;
   name: string;
   image_url: string;
   order_date: string;
@@ -81,7 +82,6 @@ export type OrdersTableType = {
   total_item: number;
   harga_menu: number;
   total_harga?: number;
-  note?: number;
 }
 
 // export type LatestOrdersRaw = Omit<LatestOrders, 'amount'> & {
@@ -148,6 +148,8 @@ export type MenuForm = {
 export type OrderForm = {
   id: string;
   invoice_id: string;
+  customer_id: string;
+  status: 'pending' | 'paid';
   menu_id: string;
   order_date: string;
   order_time: string;

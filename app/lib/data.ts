@@ -2,7 +2,7 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenuForm, MenusTableType, OrderForm, OrdersField, OrdersTableType, Revenue } from './definitions';
+import { CustomerDropwdownField, CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuDropwdownField, MenuField, MenuForm, MenusTableType, OrderForm, OrdersField, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const ITEMS_PER_PAGE = 3;
@@ -148,7 +148,8 @@ export async function fetchFilteredOrders(
     noStore();
     const data = await sql<OrdersTableType>`
       SELECT 
-        orders.id, 
+        orders.id,
+        orders.notes,
         customers.name, 
         customers.image_url,
         TO_CHAR(orders.order_date, 'DD Mon YYYY') AS order_date,
@@ -206,14 +207,18 @@ export async function fetchOrdersById(id: string) {
   try {
     const data = await sql<OrderForm>`
       SELECT
-      orders.id,
-      orders.invoice_id,
-      orders.menu_id,
-      orders.order_date,
-      orders.order_time,
-      orders.total_items,
-      orders.notes
-      FROM orders
+        orders.id,
+        orders.invoice_id,
+        orders.menu_id,
+        orders.order_date,
+        orders.order_time,
+        orders.total_items,
+        customers.id as customer_id,
+        invoices.status as status,
+        orders.notes
+        FROM orders
+      JOIN invoices ON orders.invoice_id = invoices.id
+      JOIN customers ON invoices.customer_id = customers.id
       WHERE orders.id = ${id};
     `;
  
@@ -333,6 +338,25 @@ export async function fetchCustomerById(id: string) {
     throw new Error('Failed to fetch customers.');
   }
 }
+
+export async function fetchDropdownCustomers() {
+  noStore();
+  try {
+    const data = await sql<CustomerDropwdownField>`
+      SELECT
+        id,
+        name
+      FROM customers
+      ORDER BY name ASC
+    `;
+ 
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
+  }
+}
 /* customers fungsi */
 
 
@@ -430,6 +454,26 @@ export async function fetchMenuById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch menus.');
+  }
+}
+
+export async function fetchDropdownMenus() {
+  noStore();
+  try {
+    const data = await sql<MenuDropwdownField>`
+      SELECT
+        id,
+        name,
+        price
+      FROM menus
+      ORDER BY name ASC
+    `;
+ 
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
   }
 }
 /* menus fungsi */

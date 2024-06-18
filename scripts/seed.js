@@ -138,7 +138,7 @@ async function seedInvoices(client) {
       CREATE TABLE IF NOT EXISTS invoices (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         customer_id UUID NOT NULL,
-        amount INT NOT NULL,
+        amount DECIMAL(10, 2) NOT NULL,
         invoice_date DATE NOT NULL,
         due_date DATE NOT NULL,
         status VARCHAR(255) NOT NULL,

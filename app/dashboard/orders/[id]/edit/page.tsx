@@ -1,11 +1,16 @@
 import Form from '@/app/ui/orders/edit-form';
 import Breadcrumbs from '@/app/ui/orders/breadcrumbs';
-import { fetchOrdersById, fetchOrders } from '@/app/lib/data';
+import { fetchOrdersById, fetchOrders, fetchDropdownCustomers, fetchDropdownMenus } from '@/app/lib/data';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
  
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
+  
+  const customers = await fetchDropdownCustomers();
+  console.log(customers);
+  const menus = await fetchDropdownMenus();
+
   const [orders] = await Promise.all([
     fetchOrdersById(id),
     fetchOrders(),
@@ -26,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      <Form orders={orders} />
+      <Form orders={orders} customers={customers} menus={menus} />
       </Suspense>
     </main>
   );

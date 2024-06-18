@@ -44,6 +44,9 @@ export default async function OrdersTable({
                     <th scope="col" className="px-4 py-5 font-medium">
                       Total Harga
                     </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      Catatan Order
+                    </th>
                     <th scope="col" className="relative py-3 pl-6 pr-3">
                       <span className="sr-only">Edit</span>
                     </th>
@@ -75,6 +78,9 @@ export default async function OrdersTable({
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         {order.total_harga}
+                      </td>
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                        {order.notes}
                       </td>
                       <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-2">

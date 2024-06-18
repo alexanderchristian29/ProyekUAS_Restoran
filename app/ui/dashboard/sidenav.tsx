@@ -2,6 +2,7 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import { kanit, anton, lusitana } from '@/app/ui/fonts';
 import { ArrowRightEndOnRectangleIcon,  ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
+import { signOut } from '@/auth';
  
 export default function SideNav() {
   return (
@@ -37,13 +38,18 @@ export default function SideNav() {
               className="w-6" />
               <div className={`${lusitana.className} font-bold hidden md:block`}>Back</div>
           </Link>
-          <Link
-            href= '/dashboard'
-            className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-            <ArrowRightEndOnRectangleIcon className="w-6" />
-            <div className={`${lusitana.className} font-bold hidden md:block`}>Sign Out</div>
-          </Link>
         </form>
+           <form
+              action={async () => {
+                'use server';
+                await signOut();
+              }}
+            >
+              <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+                <ArrowRightEndOnRectangleIcon className="w-6" />
+                <div className={`${lusitana.className} font-bold hidden md:block`}>Sign Out</div>
+              </button>
+            </form>
       </div>
     </div>
   );

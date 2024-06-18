@@ -8,7 +8,7 @@ export default function NotFound() {
       <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
       <p className="text-lg">The page you are looking for does not exist.</p>
       <Link
-        href="/dashboard/menus"
+        href="/dashboard/orders"
         className="mt-4 hover:underline rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
       >
         Go Back

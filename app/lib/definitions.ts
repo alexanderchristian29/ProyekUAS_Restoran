@@ -143,7 +143,6 @@ export type OrderForm = {
   notes: string | null;
 };
 
-
 export type OrdersField = {
   id: string;
   invoice_id: string;

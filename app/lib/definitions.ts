@@ -81,6 +81,7 @@ export type OrdersTableType = {
   total_item: number;
   harga_menu: number;
   total_harga?: number;
+  note?: number;
 }
 
 // export type LatestOrdersRaw = Omit<LatestOrders, 'amount'> & {
@@ -115,6 +116,17 @@ export type CustomerField = {
   email: string;
   address: string;
   image_url: string;
+};
+
+export type CustomerDropwdownField = {
+  id: string;
+  name: string;
+};
+
+export type MenuDropwdownField = {
+  id: string;
+  name: string;
+  price: number;
 };
 
 export type CustomerForm = {

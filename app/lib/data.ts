@@ -2,7 +2,7 @@
 
 import { sql } from '@vercel/postgres';
 import { formatCurrency } from './utils';
-import { CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuField, MenuForm, MenusTableType, OrderForm, OrdersField, OrdersTableType, Revenue } from './definitions';
+import { CustomerDropwdownField, CustomerField, CustomerForm, CustomersTableType, LatestInvoiceRaw, LatestOrders, MenuDropwdownField, MenuField, MenuForm, MenusTableType, OrderForm, OrdersField, OrdersTableType, Revenue } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const ITEMS_PER_PAGE = 3;
@@ -148,7 +148,8 @@ export async function fetchFilteredOrders(
     noStore();
     const data = await sql<OrdersTableType>`
       SELECT 
-        orders.id, 
+        orders.id,
+        notes,
         customers.name, 
         customers.image_url,
         TO_CHAR(orders.order_date, 'DD Mon YYYY') AS order_date,
@@ -333,6 +334,25 @@ export async function fetchCustomerById(id: string) {
     throw new Error('Failed to fetch customers.');
   }
 }
+
+export async function fetchDropdownCustomers() {
+  noStore();
+  try {
+    const data = await sql<CustomerDropwdownField>`
+      SELECT
+        id,
+        name
+      FROM customers
+      ORDER BY name ASC
+    `;
+ 
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
+  }
+}
 /* customers fungsi */
 
 
@@ -430,6 +450,26 @@ export async function fetchMenuById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch menus.');
+  }
+}
+
+export async function fetchDropdownMenus() {
+  noStore();
+  try {
+    const data = await sql<MenuDropwdownField>`
+      SELECT
+        id,
+        name,
+        price
+      FROM menus
+      ORDER BY name ASC
+    `;
+ 
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
   }
 }
 /* menus fungsi */

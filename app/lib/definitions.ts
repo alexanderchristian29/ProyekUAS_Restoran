@@ -133,6 +133,16 @@ export type MenuForm = {
   available: boolean;
 };
 
+export type OrderForm = {
+  id: string;
+  invoice_id: string;
+  menu_id: string;
+  order_date: string;
+  order_time: string;
+  total_items: number;
+  notes: string | null;
+};
+
 export type OrdersField = {
   id: string;
   name: string;

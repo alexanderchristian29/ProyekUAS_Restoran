@@ -142,8 +142,8 @@ export default function EditInvoiceForm({
                             value={formState.status}
                             onChange={handleInputChange}
                         >
-                            <option value='Pending'>Belum Bayar</option>
-                            <option value='Paid'>Sudah Bayar</option>
+                            <option value='pending'>Belum Bayar</option>
+                            <option value='paid'>Sudah Bayar</option>
                         </select>
                     </div>
                 </div>
